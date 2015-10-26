@@ -750,7 +750,7 @@ class Auth
         {
 			// Check configuration for SMTP parameters
 	       
-	            require 'PHPMailer/PHPMailerAutoload.php';
+	            require_once 'PHPMailer/PHPMailerAutoload.php';
 	
 	            $mail = new \PHPMailer;
 				if($this->config->smtp) {
