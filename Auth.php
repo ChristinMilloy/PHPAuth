@@ -781,8 +781,37 @@ class Auth
 				}
 	        else {
 				$mail->Subject = sprintf($this->lang['email_reset_subject'], $this->config->site_name);
-				$mail->Body = sprintf($this->lang['email_reset_body'], $this->config->site_url, $this->config->site_password_reset_page, $key);
-				$mail->AltBody = sprintf($this->lang['email_reset_altbody'], $this->config->site_url, $this->config->site_password_reset_page, $key);
+				// BEGIN CUSTOM CODE FOR IDX
+
+				$variables=[];
+
+				$result = $this->getRequest($key,'reset');
+				if($result['error']==1){
+					$variables['name'] = '';
+				} else {
+					$result2 = $this->getUser($result['uid']);
+					$variables['name'] = $result2['name'];
+				}
+
+				$variables['site_url'] = $this->config->site_url;
+				$variables['site_password_reset_page'] = $this->config->site_password_reset_page;
+				$variables['key'] = $key;
+
+				$Body = $this->lang['email_reset_body'];
+
+				foreach ($variables as $k => $v){
+					$Body = str_replace('%%'.$k.'%%',$v,$Body);
+				}
+
+				$mail->Body = $Body;
+				$mail->AltBody = $Body;
+
+				//END CUSTOM CODE FOR IDX
+				//commented original code:
+
+				//$mail->Body = sprintf($this->lang['email_reset_body'], $this->config->site_url, $this->config->site_password_reset_page, $key, $name);
+
+				//$mail->AltBody = sprintf($this->lang['email_reset_altbody'], $this->config->site_url, $this->config->site_password_reset_page, $key);
 			}
 	
 			if(!$mail->send()) {
