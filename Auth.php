@@ -788,9 +788,11 @@ class Auth
 				$result = $this->getRequest($key,'reset');
 				if($result['error']==1){
 					$variables['name'] = '';
+					$variables['email'] = '';
 				} else {
 					$result2 = $this->getUser($result['uid']);
 					$variables['name'] = $result2['name'];
+					$variables['email'] = $result2['email'];
 				}
 
 				$variables['site_url'] = $this->config->site_url;
